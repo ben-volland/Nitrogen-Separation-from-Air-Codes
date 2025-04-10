@@ -1,0 +1,45 @@
+# Constants for Antoine equation for water (valid 1°C to 100°C)
+A = 8.07131
+B = 1730.63
+C = 233.426
+
+# Given conditions
+T_Celsius = 24.67  # Temperature in Celsius
+RH = 0.5517  # Relative Humidity as a fraction
+P_total_kPa = 101.325  # Atmospheric pressure in kPa
+
+# Step 1: Calculate saturation vapor pressure (P_sat) at 26°C in mmHg
+P_sat = 10 ** (A - (B / (C + T_Celsius)))  # Correct for mmHg
+
+# Convert P_sat to kPa (1 mmHg = 0.133322 kPa)
+P_sat_kPa = P_sat * 0.133322
+
+# Step 2: Calculate partial pressure of water vapor (P_H2O)
+P_H2O_kPa = RH * P_sat_kPa
+
+# Step 3: Calculate partial pressure of dry air (P_dry_air)
+P_dry_air_kPa = P_total_kPa - P_H2O_kPa
+
+# Step 4: Mole fractions of components
+y_H2O = P_H2O_kPa / P_total_kPa  # Mole fraction of H2O
+
+# Dry air composition ratios
+N2_fraction = 0.7809
+O2_fraction = 0.2095
+Ar_fraction = 0.0093
+
+# Scale dry air fractions by P_dry_air
+y_N2 = (N2_fraction * P_dry_air_kPa) / P_total_kPa
+y_O2 = (O2_fraction * P_dry_air_kPa) / P_total_kPa
+y_Ar = (Ar_fraction * P_dry_air_kPa) / P_total_kPa
+
+# Output the results (FIXED PRINT STATEMENT)
+print({
+    "Water Vapor (H2O)": y_H2O,
+    "Nitrogen (N2)": y_N2,
+    "Oxygen (O2)": y_O2,
+    "Argon (Ar)": y_Ar,
+    "Water (H2O)": y_H2O,
+    "Saturation Vapor Pressure (kPa)": P_sat_kPa,
+    "Partial Pressure of Water Vapor (kPa)": P_H2O_kPa
+})
